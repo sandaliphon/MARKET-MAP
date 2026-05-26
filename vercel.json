@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/china_city_double_track_map.html"
+    }
+  ]
+}
