@@ -1,0 +1,130 @@
+{
+  "maps": [
+    {
+      "id": "全国_兵力部署-连队",
+      "title": "全国兵力部署-连队",
+      "regionName": "全国",
+      "mapLabel": "兵力部署-连队",
+      "countLabel": "342 条城市数据",
+      "optionPath": "data/全国_兵力部署-连队.json",
+      "htmlPath": "national/全国兵力部署-连队.html"
+    },
+    {
+      "id": "全国_兵力部署-销售员",
+      "title": "全国兵力部署-销售员",
+      "regionName": "全国",
+      "mapLabel": "兵力部署-销售员",
+      "countLabel": "186 个销售员标记点",
+      "optionPath": "data/全国_兵力部署-销售员.json",
+      "htmlPath": "national/全国兵力部署-销售员.html"
+    },
+    {
+      "id": "东南大营_兵力部署-连队",
+      "title": "东南大营兵力部署-连队",
+      "regionName": "东南大营",
+      "mapLabel": "兵力部署-连队",
+      "countLabel": "54 条城市数据",
+      "optionPath": "data/东南大营_兵力部署-连队.json",
+      "htmlPath": "regions/东南大营/东南大营兵力部署-连队.html"
+    },
+    {
+      "id": "东南大营_兵力部署-销售员",
+      "title": "东南大营兵力部署-销售员",
+      "regionName": "东南大营",
+      "mapLabel": "兵力部署-销售员",
+      "countLabel": "48 个销售员标记点",
+      "optionPath": "data/东南大营_兵力部署-销售员.json",
+      "htmlPath": "regions/东南大营/东南大营兵力部署-销售员.html"
+    },
+    {
+      "id": "中原大营_兵力部署-连队",
+      "title": "中原大营兵力部署-连队",
+      "regionName": "中原大营",
+      "mapLabel": "兵力部署-连队",
+      "countLabel": "52 条城市数据",
+      "optionPath": "data/中原大营_兵力部署-连队.json",
+      "htmlPath": "regions/中原大营/中原大营兵力部署-连队.html"
+    },
+    {
+      "id": "中原大营_兵力部署-销售员",
+      "title": "中原大营兵力部署-销售员",
+      "regionName": "中原大营",
+      "mapLabel": "兵力部署-销售员",
+      "countLabel": "43 个销售员标记点",
+      "optionPath": "data/中原大营_兵力部署-销售员.json",
+      "htmlPath": "regions/中原大营/中原大营兵力部署-销售员.html"
+    },
+    {
+      "id": "向西大营_兵力部署-连队",
+      "title": "向西大营兵力部署-连队",
+      "regionName": "向西大营",
+      "mapLabel": "兵力部署-连队",
+      "countLabel": "52 条城市数据",
+      "optionPath": "data/向西大营_兵力部署-连队.json",
+      "htmlPath": "regions/向西大营/向西大营兵力部署-连队.html"
+    },
+    {
+      "id": "向西大营_兵力部署-销售员",
+      "title": "向西大营兵力部署-销售员",
+      "regionName": "向西大营",
+      "mapLabel": "兵力部署-销售员",
+      "countLabel": "22 个销售员标记点",
+      "optionPath": "data/向西大营_兵力部署-销售员.json",
+      "htmlPath": "regions/向西大营/向西大营兵力部署-销售员.html"
+    },
+    {
+      "id": "泰山大营_兵力部署-连队",
+      "title": "泰山大营兵力部署-连队",
+      "regionName": "泰山大营",
+      "mapLabel": "兵力部署-连队",
+      "countLabel": "65 条城市数据",
+      "optionPath": "data/泰山大营_兵力部署-连队.json",
+      "htmlPath": "regions/泰山大营/泰山大营兵力部署-连队.html"
+    },
+    {
+      "id": "泰山大营_兵力部署-销售员",
+      "title": "泰山大营兵力部署-销售员",
+      "regionName": "泰山大营",
+      "mapLabel": "兵力部署-销售员",
+      "countLabel": "37 个销售员标记点",
+      "optionPath": "data/泰山大营_兵力部署-销售员.json",
+      "htmlPath": "regions/泰山大营/泰山大营兵力部署-销售员.html"
+    },
+    {
+      "id": "西南大营_兵力部署-连队",
+      "title": "西南大营兵力部署-连队",
+      "regionName": "西南大营",
+      "mapLabel": "兵力部署-连队",
+      "countLabel": "98 条城市数据",
+      "optionPath": "data/西南大营_兵力部署-连队.json",
+      "htmlPath": "regions/西南大营/西南大营兵力部署-连队.html"
+    },
+    {
+      "id": "西南大营_兵力部署-销售员",
+      "title": "西南大营兵力部署-销售员",
+      "regionName": "西南大营",
+      "mapLabel": "兵力部署-销售员",
+      "countLabel": "25 个销售员标记点",
+      "optionPath": "data/西南大营_兵力部署-销售员.json",
+      "htmlPath": "regions/西南大营/西南大营兵力部署-销售员.html"
+    },
+    {
+      "id": "长江大营_兵力部署-连队",
+      "title": "长江大营兵力部署-连队",
+      "regionName": "长江大营",
+      "mapLabel": "兵力部署-连队",
+      "countLabel": "40 条城市数据",
+      "optionPath": "data/长江大营_兵力部署-连队.json",
+      "htmlPath": "regions/长江大营/长江大营兵力部署-连队.html"
+    },
+    {
+      "id": "长江大营_兵力部署-销售员",
+      "title": "长江大营兵力部署-销售员",
+      "regionName": "长江大营",
+      "mapLabel": "兵力部署-销售员",
+      "countLabel": "11 个销售员标记点",
+      "optionPath": "data/长江大营_兵力部署-销售员.json",
+      "htmlPath": "regions/长江大营/长江大营兵力部署-销售员.html"
+    }
+  ]
+}

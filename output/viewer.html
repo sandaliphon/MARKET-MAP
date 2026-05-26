@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>中集车辆半挂车业务集团市场总览</title>
+  <script src="https://assets.pyecharts.org/assets/v6/echarts.min.js"></script>
+  <script src="assets/china-cities.js"></script>
+  <style>
+    html,body{margin:0;padding:0;width:100vw;height:100vh;overflow:hidden;font-family:Arial,'Microsoft YaHei',sans-serif;}
+    #chart{width:100vw;height:100vh;}
+    .viewer-toolbar{position:fixed;right:18px;top:18px;z-index:9999;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;background:rgba(255,255,255,0.94);border:1px solid #d8dde3;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.12);font-size:12px;color:#1f2933;}
+    .viewer-toolbar a{height:28px;border:0;border-radius:5px;padding:0 10px;background:#0b67c2;color:#fff;text-decoration:none;display:inline-flex;align-items:center;font:12px Arial,'Microsoft YaHei',sans-serif;}
+    .viewer-toolbar a.download{background:#4b5563;}
+    .viewer-toolbar label{display:inline-flex;align-items:center;gap:5px;}
+    #status{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);font:14px Arial,'Microsoft YaHei',sans-serif;color:#4b5563;}
+  </style>
+</head>
+<body>
+  <div class="viewer-toolbar">
+    <label><input id="team-label-toggle" type="checkbox" checked>气泡常驻</label>
+    <a id="download-html" class="download" href="#" download>下载本地文件</a>
+    <a href="index.html">返回首页</a>
+  </div>
+  <div id="status">地图加载中...</div>
+  <div id="chart"></div>
+  <script>
+    const manifestPath = "data/maps.json";
+    const provinceBoundaryPath = "data/province_boundaries.json";
+    const chart = echarts.init(document.getElementById("chart"), "white", {renderer: "canvas", locale: "ZH"});
+    let labelDataCache = {};
+
+    function withCacheBuster(path) {
+      const joiner = path.indexOf("?") >= 0 ? "&" : "?";
+      return path + joiner + "v=" + Date.now();
+    }
+
+    function reviveFunctions(value) {
+      if (Array.isArray(value)) {
+        return value.map(reviveFunctions);
+      }
+      if (value && typeof value === "object") {
+        Object.keys(value).forEach(function(key) {
+          value[key] = reviveFunctions(value[key]);
+        });
+        return value;
+      }
+      if (typeof value === "string" && /^function\s*\(/.test(value.trim())) {
+        return Function("return (" + value + ");")();
+      }
+      return value;
+    }
+
+    function applyTeamLabelMode(alwaysShow) {
+      const option = chart.getOption();
+      const series = option.series || [];
+      for (let i = 0; i < series.length; i++) {
+        const s = series[i];
+        if (s.id === "team-label-layer" || s.id === "salesperson-label-layer") {
+          if (!labelDataCache[s.id] && s.data && s.data.length) {
+            labelDataCache[s.id] = s.data;
+          }
+          s.data = alwaysShow ? (labelDataCache[s.id] || s.data || []) : [];
+        }
+        if (s.id === "team-point-layer") {
+          s.label = s.label || {};
+          s.label.show = false;
+          s.emphasis = s.emphasis || {};
+          s.emphasis.disabled = false;
+          s.emphasis.label = s.emphasis.label || {};
+          s.emphasis.label.show = true;
+          const data = s.data || [];
+          for (let j = 0; j < data.length; j++) {
+            data[j].label = data[j].label || {};
+            data[j].label.show = false;
+          }
+        }
+      }
+      chart.setOption({series});
+    }
+
+    async function appendSharedProvinceBoundary(option) {
+      try {
+        const data = await fetch(withCacheBuster(provinceBoundaryPath)).then(r => r.ok ? r.json() : null);
+        if (!data || !Array.isArray(data)) {
+          return option;
+        }
+        option.series = option.series || [];
+        option.series.push({
+          type: "lines",
+          name: "省级边界",
+          coordinateSystem: "geo",
+          polyline: true,
+          data: data,
+          silent: true,
+          symbol: "none",
+          z: 20,
+          animation: false,
+          lineStyle: {
+            color: "#d0d4d9",
+            width: 1.4,
+            opacity: 0.75,
+            type: "solid"
+          },
+          tooltip: {show: false}
+        });
+      } catch (error) {
+        console.warn("省级边界加载失败", error);
+      }
+      return option;
+    }
+
+    async function loadMap() {
+      const params = new URLSearchParams(window.location.search);
+      const mapId = params.get("map");
+      const manifest = await fetch(withCacheBuster(manifestPath)).then(r => r.json());
+      const meta = manifest.maps.find(item => item.id === mapId) || manifest.maps[0];
+      if (!meta) {
+        throw new Error("未找到地图清单");
+      }
+      document.title = meta.title;
+      const download = document.getElementById("download-html");
+      download.href = meta.htmlPath;
+      download.download = meta.title + ".html";
+
+      const option = await fetch(withCacheBuster(meta.optionPath)).then(r => r.json()).then(reviveFunctions).then(appendSharedProvinceBoundary);
+      chart.setOption(option, true);
+      document.getElementById("status").style.display = "none";
+      applyTeamLabelMode(document.getElementById("team-label-toggle").checked);
+    }
+
+    document.getElementById("team-label-toggle").addEventListener("change", function() {
+      applyTeamLabelMode(this.checked);
+    });
+    window.addEventListener("resize", function() { chart.resize(); });
+    loadMap().catch(function(error) {
+      document.getElementById("status").textContent = "地图加载失败：" + error.message;
+      console.error(error);
+    });
+  </script>
+</body>
+</html>

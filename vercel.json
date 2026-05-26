@@ -1,8 +1,6 @@
 {
-  "rewrites": [
-    {
-      "source": "/",
-      "destination": "/china_city_double_track_map.html"
-    }
-  ]
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": null,
+  "installCommand": null,
+  "outputDirectory": "output"
 }

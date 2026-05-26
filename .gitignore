@@ -1,5 +1,6 @@
 .venv/
 __pycache__/
 *.pyc
-output/
 .env
+output/server.log
+output/server.err.log
