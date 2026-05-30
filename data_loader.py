@@ -98,6 +98,7 @@ def load_troop_data(file_path, config=AppConfig):
         columns["PEOPLE"],
         columns["CAPTAIN"],
         columns["MEMBERS"],
+        columns["BUDGET"],
     ]
     for col in required_cols:
         if col not in df.columns:
@@ -107,6 +108,7 @@ def load_troop_data(file_path, config=AppConfig):
     team_col = columns.get("TEAM")
     captain_col = columns.get("CAPTAIN")
     members_col = columns.get("MEMBERS")
+    budget_col = columns.get("BUDGET")
     sales_col = columns.get("SALES")
     share_col = columns.get("SHARE")
 
@@ -152,6 +154,8 @@ def load_troop_data(file_path, config=AppConfig):
             sales = None
             if pd.notna(raw_sales) and str(raw_sales).strip() != "":
                 sales = float(raw_sales)
+            else:
+                sales = 0.0
 
             raw_share = metric.get("share")
             if raw_share is None and share_col and share_col in df.columns:
@@ -160,6 +164,7 @@ def load_troop_data(file_path, config=AppConfig):
             people = str(row[columns["PEOPLE"]]).strip() if pd.notna(row[columns["PEOPLE"]]) else ""
             captain = str(row[captain_col]).strip() if captain_col and captain_col in df.columns and pd.notna(row[captain_col]) else ""
             members = str(row[members_col]).strip() if members_col and members_col in df.columns and pd.notna(row[members_col]) else ""
+            budget = str(row[budget_col]).strip() if budget_col and budget_col in df.columns and pd.notna(row[budget_col]) else ""
             if people and not people.endswith("人"):
                 people = f"{people}人"
 
@@ -173,6 +178,7 @@ def load_troop_data(file_path, config=AppConfig):
                 "people": people,
                 "captain": captain,
                 "members": members,
+                "budget": budget,
             })
         except:
             continue
@@ -235,7 +241,7 @@ def load_salesperson_data(file_path, config=AppConfig):
                 continue
             metric = monthly_metrics.get((text_key(name), text_key(hq), text_key(team)), {})
             budget = metric.get("budget")
-            if budget is None or budget == "":
+            if budget is None or pd.isna(budget) or str(budget).strip() == "":
                 budget = row[columns["BUDGET"]]
 
             records.append({

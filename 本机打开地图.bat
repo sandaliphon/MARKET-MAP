@@ -3,7 +3,7 @@ setlocal
 cd /d "%~dp0"
 
 set "PORT=8765"
-set "URL=http://127.0.0.1:%PORT%/index.html"
+set "URL=http://127.0.0.1:%PORT%/index.html?v=%RANDOM%%RANDOM%"
 
 echo Starting local map server...
 echo URL: %URL%

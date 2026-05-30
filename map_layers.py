@@ -207,10 +207,10 @@ def append_salesperson_layer(geo, salesperson_points, config):
         if not city:
             continue
         target_city = city
-        coordinate = geo.get_coordinate(target_city)
+        coordinate = resolve_salesperson_coordinate(geo, target_city)
         if coordinate is None:
             short_city = target_city.replace("自治州", "").replace("蒙古", "").replace("哈萨克", "").replace("柯尔克孜", "").strip()
-            coordinate = geo.get_coordinate(short_city)
+            coordinate = resolve_salesperson_coordinate(geo, short_city)
             if coordinate is None:
                 continue
             target_city = short_city
@@ -310,6 +310,16 @@ def append_salesperson_layer(geo, salesperson_points, config):
         "renderItem": salesperson_label_render_item(symbol_color),
         "tooltip": {"show": False},
     })
+
+
+def resolve_salesperson_coordinate(geo, city):
+    return resolve_map_coordinate(geo, city)
+
+
+def resolve_map_coordinate(geo, city):
+    if city in ["越南", "河内", "海防"]:
+        return [106.0, 21.4]
+    return geo.get_coordinate(city)
 
 
 def salesperson_label_render_item(symbol_color):

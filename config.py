@@ -51,6 +51,7 @@ class AppConfig:
         "PEOPLE": "人数",
         "CAPTAIN": "连长",
         "MEMBERS": "团队成员",
+        "BUDGET": "26年年度预算",
     }
     TROOP_MONTHLY_COLUMNS = {
         "HEADQUARTER": "营部",

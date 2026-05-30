@@ -212,6 +212,9 @@ def write_index(generated_items, output_dir):
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>{AppConfig.Site.TITLE}</title>
   <script src="https://assets.pyecharts.org/assets/v6/echarts.min.js"></script>
   <script src="assets/china-cities.js"></script>
@@ -596,6 +599,9 @@ def write_viewer(output_dir):
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>{AppConfig.Site.TITLE}</title>
   <script src="https://assets.pyecharts.org/assets/v6/echarts.min.js"></script>
   <script src="assets/china-cities.js"></script>

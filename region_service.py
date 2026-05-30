@@ -41,11 +41,13 @@ def merge_market_and_troop_data(market_records, troop_records):
             troop_by_city[key] = troop
 
     merged_records = []
+    matched_troop_keys = set()
     for record in market_records:
         merged = dict(record)
         key = data_loader.city_match_key(record.get("city", ""))
         troop = troop_by_city.get(key)
         if troop:
+            matched_troop_keys.add(key)
             merged["point_val"] = troop.get("sales")
             merged["troop_headquarter"] = troop.get("headquarter", "")
             merged["team_name"] = troop.get("team", "")
@@ -55,7 +57,26 @@ def merge_market_and_troop_data(market_records, troop_records):
             merged["people"] = troop.get("people", "")
             merged["captain"] = troop.get("captain", "")
             merged["members"] = troop.get("members", "")
+            merged["budget"] = troop.get("budget", "")
         merged_records.append(merged)
+
+    for key, troop in troop_by_city.items():
+        if key in matched_troop_keys:
+            continue
+        merged_records.append({
+            "city": troop.get("city", ""),
+            "map_val": 0.0,
+            "point_val": troop.get("sales"),
+            "troop_headquarter": troop.get("headquarter", ""),
+            "team_name": troop.get("team", ""),
+            "team_sales": troop.get("sales"),
+            "team_share": troop.get("share", ""),
+            "deployment": troop.get("people", ""),
+            "people": troop.get("people", ""),
+            "captain": troop.get("captain", ""),
+            "members": troop.get("members", ""),
+            "budget": troop.get("budget", ""),
+        })
 
     return merged_records
 
@@ -116,11 +137,13 @@ def filter_by_region(records, region):
     region_records = []
     for record in records:
         city = record.get("city")
-        if city not in city_set:
-            continue
         enriched = dict(record)
         enriched["region_name"] = region.get("name", "")
         enriched["region_team"] = city_teams.get(city, "")
+        if city not in city_set:
+            if record.get("point_val") is None or record.get("troop_headquarter") != region.get("name"):
+                continue
+            enriched["region_team"] = record.get("team_name", "")
         if not is_point_in_region(enriched):
             clear_point_data(enriched)
         region_records.append(enriched)
@@ -157,6 +180,7 @@ def clear_point_data(record):
     record["people"] = ""
     record["captain"] = ""
     record["members"] = ""
+    record["budget"] = ""
 
 
 def export_region_data(records, output_path):
@@ -170,6 +194,7 @@ def export_region_data(records, output_path):
         "销量",
         "市占率",
         "人数",
+        "26年年度预算",
     ]
     with open(output_path, "w", encoding="utf-8-sig", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
@@ -184,6 +209,7 @@ def export_region_data(records, output_path):
                 "销量": record.get("team_sales", ""),
                 "市占率": record.get("team_share", ""),
                 "人数": record.get("people") or record.get("deployment", ""),
+                "26年年度预算": record.get("budget", ""),
             })
 
 

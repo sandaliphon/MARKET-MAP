@@ -94,7 +94,8 @@ class ChartFactory:
                         "team_share": v.get("team_share", ""),
                         "deployment": v.get("deployment", ""),
                         "captain": v.get("captain", ""),
-                        "members": v.get("members", "")
+                        "members": v.get("members", ""),
+                        "budget": v.get("budget", "")
                     }
                 else:
                     city = v[0]
@@ -107,23 +108,27 @@ class ChartFactory:
                         "team_share": "",
                         "deployment": "",
                         "captain": "",
-                        "members": ""
+                        "members": "",
+                        "budget": ""
                     }
 
                 if not city:
                     continue
                     
                 target_city = str(city).strip()
-                if geo.get_coordinate(target_city) is None:
+                point_coordinate = map_layers.resolve_map_coordinate(geo, target_city)
+                if point_coordinate is None:
                     short_city = target_city.replace("自治州", "").replace("蒙古", "").replace("哈萨克", "").replace("柯尔克孜", "").strip()
-                    if geo.get_coordinate(short_city) is not None:
+                    if map_layers.resolve_map_coordinate(geo, short_city) is not None:
                         target_city = short_city
                     else:
                         continue 
+                if geo.get_coordinate(target_city) is None and point_coordinate is not None:
+                    geo.add_coordinate(target_city, point_coordinate[0], point_coordinate[1])
 
                 safe_map_data.append((target_city, float(m_val) if m_val else 0.0))
                 
-                if p_val is not None and float(p_val) > 0:
+                if p_val is not None and float(p_val) >= 0:
                     safe_point_data.append((target_city, float(p_val)))
                     safe_point_meta.append(point_meta)
             except:
@@ -179,6 +184,7 @@ class ChartFactory:
             item["deployment"] = meta.get("deployment", "")
             item["captain"] = meta.get("captain", "")
             item["members"] = meta.get("members", "")
+            item["teamBudget"] = meta.get("budget", "")
             item["label"] = map_layers.point_label_layout(item.get("name", ""), index)
 
         min_symbol_size, max_symbol_size = size_range
@@ -201,6 +207,7 @@ class ChartFactory:
                     "  var lines = [];"
                     "  var sales = data.teamSales !== undefined && data.teamSales !== null ? data.teamSales : '';"
                     "  var share = data.teamShare || '';"
+                    "  var budget = data.teamBudget || '';"
                     "  var hq = data.headquarter || '';"
                     "  var colors = {"
                     "    '西南大营': '#0052cc',"
@@ -217,6 +224,7 @@ class ChartFactory:
                     "      .replace(/>/g, '&gt;').replace(/\\\"/g, '&quot;').replace(/'/g, '&#39;');"
                     "  };"
                     "  lines.push(['连队', data.teamName || '']);"
+                    "  lines.push(['26年预算目标', budget === '' ? '' : budget + '台']);"
                     "  lines.push(['连队销量', sales === '' ? '' : sales + '台']);"
                     "  lines.push(['市占率', share]);"
                     "  lines.push(['人数', data.deployment || '']);"
@@ -224,7 +232,7 @@ class ChartFactory:
                     "  lines.push(['团队成员', data.members || '']);"
                     "  var body = lines.map(function(row) {"
                     "    return '<div style=\"display:flex;gap:10px;align-items:flex-start;margin-top:5px;\">'"
-                    "      + '<span style=\"flex:0 0 62px;color:#5b6673;\">' + esc(row[0]) + '</span>'"
+                    "      + '<span style=\"flex:0 0 84px;color:#5b6673;\">' + esc(row[0]) + '</span>'"
                     "      + '<span style=\"max-width:280px;color:#1f2933;font-weight:600;white-space:normal;\">' + esc(row[1]) + '</span>'"
                     "      + '</div>';"
                     "  }).join('');"
